@@ -26,8 +26,19 @@ void loadingBar(){
     }
 }
 
-// Driver Code
+int is_link(char* x){
+    if(strlen(x) < 8)
+        return 0;
+    char prefix[9];
+    for(int i = 0; i < 8; i++)
+        prefix[i] = x[i];
+    return strcmp(prefix, "https://") == 0;
+}
+
+// Syntax
+// grm install ...
 int main(int argc, char** argv){
+    char github_prefix[100] = "https://github.com/"
 	char clone[100] = "git clone ";
 	char* pull = "git pull";
 	char* mode = argv[1];
