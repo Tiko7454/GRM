@@ -1,5 +1,13 @@
 *.bat
 *.exe
 *.sh
+
+
+.directory
 .kdev4/*
+
+test.c
+test
+GRM.kdev4
+grm
 

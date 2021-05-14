@@ -31,25 +31,45 @@ int is_link(char* x){
 // grm install ...
 int main(int argc, char** argv){
     char github_prefix[100] = "https://github.com/";
-    char clone[100] = "git clone ";
+    char clone[1000] = "git clone ";
     char* pull = "git pull";
     char* mode = argv[1];
+
+    /* get RPs_location */
+    FILE* config_file;
+    char RPs_location[1003];
+    config_file = fopen("config", "r");
+    fscanf(config_file, "%s", RPs_location);
+    fclose(config_file);
+    /* end */
+
     if(strcmp(mode, "install") == 0){
         for(int i = 2; i < argc; i++){
             char* arg = argv[i];  // add default github prefix if necessary
             strcat(clone, arg);
-            strcat(clone, " ../RPs/");
-            // unlinking arg
-                char unlinked_arg[100] = "";
-                if(is_link(arg))
-                    for(int i = 8; i < strlen(arg); i++)
-                        unlinked_arg[i-8] = arg[i];
-                else
-                    strcat(unlinked_arg, arg);
-            //end
-            strcat(clone, unlinked_arg);
+            strcat(clone, " ");
+            strcat(clone, RPs_location);
+            /* unlinking arg */
+            char unlinked_arg[1000] = "";
+            if(is_link(arg))
+                for(int i = 8; i < strlen(arg); i++)
+                    unlinked_arg[i-8] = arg[i];
+            else
+                strcat(unlinked_arg, arg); //
+            /* end */
+            puts(unlinked_arg);
+            strcat(clone, unlinked_arg); //why??????????????
+            puts(unlinked_arg);
             system(clone);
+            //check if clone has done successfully
+            /* adding to RPL */
+            FILE* RPL;
+            RPL = fopen("RPL", "a");
+            fprintf(RPL, "%s\n", unlinked_arg); //
+            fclose(RPL);
+            /* end */
+
         }
     }
-
+    return 0;
 }
