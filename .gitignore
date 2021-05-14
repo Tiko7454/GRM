@@ -1,4 +1,5 @@
 *.bat
 *.exe
 *.sh
+.kdev4/*
 
