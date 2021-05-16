@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "config.h"
 
 
 void loadingBar(){
@@ -35,20 +36,12 @@ int main(int argc, char** argv){
     char* pull = "git pull";
     char* mode = argv[1];
 
-    /* get RPs_location */
-    FILE* config_file;
-    char RPs_location[1003];
-    config_file = fopen("config", "r");
-    fscanf(config_file, "%s", RPs_location);
-    fclose(config_file);
-    /* end */
-
     if(strcmp(mode, "install") == 0){
         for(int i = 2; i < argc; i++){
             char* arg = argv[i];  // add default github prefix if necessary
             strcat(clone, arg);
             strcat(clone, " ");
-            strcat(clone, RPs_location);
+            strcat(clone, RPS_LOCATION);
             /* unlinking arg */
             char unlinked_arg[1000] = "";
             if(is_link(arg))
@@ -57,9 +50,7 @@ int main(int argc, char** argv){
             else
                 strcat(unlinked_arg, arg); //
             /* end */
-            puts(unlinked_arg);
-            strcat(clone, unlinked_arg); //why??????????????
-            puts(unlinked_arg);
+            strcat(clone, unlinked_arg);
             system(clone);
             //check if clone has done successfully
             /* adding to RPL */
