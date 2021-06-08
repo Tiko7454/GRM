@@ -2,12 +2,8 @@
 *.exe
 *.sh
 
-
 .directory
-.kdev4/*
 
-test.c
+test.cxx
 test
-GRM.kdev4
 grm
-
