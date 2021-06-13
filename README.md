@@ -16,20 +16,13 @@ Download grm somewhere.
 
 
 Edit config.hxx:
-
-Set as RPS_LOCATION the location, where you want your installed repos be downloaded
-
-Set as INSTALL the command, which you want to use to install packages (mustn't contain spaces)
-
-and etc
+> Set as `RPS_LOCATION` the location, where you want your installed repos be downloaded.  
+> Set as `INSTALL` the command, which you want to use to install packages (mustn't contain spaces)  
+> and etc
 
 
 Compile GRM.cxx:
-
-(g++ GRM.cxx -o grm) (GNU/Linux)
-
-(g++ GRM.cxx -o grm.exe) (Windows)
-
-
+> `g++ GRM.cxx -o grm` (GNU/Linux)  
+> `g++ GRM.cxx -o grm.exe` (Windows)
 
 Finally you can use the binery file, moving it anywhere you like and it will work correctly
