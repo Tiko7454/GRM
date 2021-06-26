@@ -1,8 +1,7 @@
 # GRM
-Git Repo Manager
 
-
-This is a repository manager for Github, Gitlab and all other software hosting providers which use Git.
+![License](https://img.shields.io/github/license/Tiko7454/GRM?color=blue)  
+Git Repo Manager is a repository manager for Github, Gitlab and all other software hosting providers which use Git.
 GRM groupes git repositories and provides one command updates for all of them. There is no need to install them, update them, remove them, group them manually. GRM does everything instrad of the user.
 
 
