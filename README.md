@@ -21,10 +21,9 @@ Edit config.hxx:
 > and etc
 
 
-Compile GRM.cxx:
-> `g++ GRM.cxx -o grm` (GNU/Linux)  
-> `g++ GRM.cxx -o grm.exe` (Windows)
+Compile grm.cxx:
+> `g++ grm.cxx -o grm` (GNU/Linux)  
+> `g++ grmw.cxx -o grmw.exe` (Windows)
 
 Finally you can use the binery file, moving it anywhere you like and it will work correctly
 
-(not working on Windows yet)
