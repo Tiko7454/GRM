@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/github/license/Tiko7454/GRM?color=blue)  
 Git Repo Manager is a repository manager for Github, Gitlab and all other software hosting providers which use Git.
-GRM groupes git repositories and provides one command updates for all of them. There is no need to install them, update them, remove them, group them manually. GRM does everything instrad of the user.
+GRM groups git repositories and provides one command updates for all of them. There is no need to install, update, remove and group them manually. GRM does everything instead of the user.
 
 
 # Dependencies
@@ -24,5 +24,5 @@ Compile grm.cxx:
 > `g++ grm.cxx -o grm` (GNU/Linux)  
 > `g++ grmw.cxx -o grmw.exe` (Windows)
 
-Finally you can use the binery file, moving it anywhere you like and it will work correctly
+Finally, use the binary file. You can move it anywhere you like and it will continue to work correctly.
 
