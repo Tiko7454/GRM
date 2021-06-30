@@ -6,6 +6,16 @@
 #include "config.hxx"
 
 
+#ifdef WINDOWS
+#include <algorithm>
+
+
+std::string path_to_win(std::string x) {
+    std::replace(x.begin(), x.end(), '/', '\\');
+    return x;
+}
+#endif
+
 namespace consts {
     const std::string PREFIX = "https://",
                       CLONE = "git clone ",
@@ -17,6 +27,17 @@ namespace consts {
 
 bool is_link(std::string x) {
     return x.find(consts::PREFIX) == 0;  // if it starts with "https://"
+}
+
+
+void rm(std::string arg){
+    #ifdef WINDOWS
+        std::replace(arg.begin(), arg.end(), '/', '\\');
+        std::system(("del /Q /F /S " + arg).c_str());
+        std::system(("rmdir /S /Q " + arg).c_str());
+    #else
+        std::system(("rm -rf " + arg).c_str());
+    #endif
 }
 
 
@@ -50,7 +71,15 @@ void update() {
                   << "..." 
                   << std::endl;
         std::string arg = config::RPS_LOCATION + line,
-                    cd = "cd " + arg + "; ";
+                    cd = "cd " + arg;
+
+        #ifdef WINDOWS
+        arg = path_to_win(arg);
+        cd += "&& ";
+        #else
+        cd += "; ";
+        #endif
+
         std::cout << "Repairing local repository version..."
                   << std::endl;
         std::system((cd + consts::RESTORE).c_str());
@@ -74,7 +103,7 @@ void reinstall() {
                   << "..."
                   << std::endl;
         std::string arg = " " + config::RPS_LOCATION + line;
-        std::system(("rm -rf" + arg).c_str());
+        rm(arg);
         std::system((
             consts::CLONE + consts::PREFIX + line + " " + config::RPS_LOCATION + line
         ).c_str());
@@ -104,7 +133,7 @@ void remove(int argc, char** argv) {
                           << arg
                           << "..."
                           << std::endl;
-                std::system(("rm -rf " + config::RPS_LOCATION + arg).c_str());
+                rm(config::RPS_LOCATION + arg);
             } else
                 fout << line
                      << std::endl;    
