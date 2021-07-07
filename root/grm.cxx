@@ -21,7 +21,8 @@ namespace consts {
                       CLONE = "git clone ",
                       PULL = "git pull",
                       RESTORE = "git restore .",
-                      RPL_LOCATION = config::RPS_LOCATION + "RPL";
+                      RPS_LOCATION = config::GRM_LOCATION + ".RPs/",
+                      RPL_LOCATION = config::GRM_LOCATION + ".RPL";
 }
 
 
@@ -45,7 +46,7 @@ void install(int argc, char** argv) {
     for(int i = 2; i < argc; i++) {
         std::string clone = consts::CLONE,  // local mutable string for each argument
                     arg = argv[i];  // add default github prefix if necessary    
-        clone += arg + " " + config::RPS_LOCATION;
+        clone += arg + " " + consts::RPS_LOCATION;
         if(is_link(arg))
             arg = arg.substr(8);
         clone += arg;
@@ -70,15 +71,12 @@ void update() {
                   << line
                   << "..." 
                   << std::endl;
-        std::string arg = config::RPS_LOCATION + line,
+        std::string arg = consts::RPS_LOCATION + line,
                     cd = "cd " + arg;
-
         #ifdef WINDOWS
         arg = path_to_win(arg);
-        cd += "&& ";
-        #else
-        cd += "; ";
         #endif
+        cd += "&& ";
 
         std::cout << "Repairing local repository version..."
                   << std::endl;
@@ -102,10 +100,10 @@ void reinstall() {
                   << line 
                   << "..."
                   << std::endl;
-        std::string arg = " " + config::RPS_LOCATION + line;
+        std::string arg = " " + consts::RPS_LOCATION + line;
         rm(arg);
         std::system((
-            consts::CLONE + consts::PREFIX + line + " " + config::RPS_LOCATION + line
+            consts::CLONE + consts::PREFIX + line + " " + consts::RPS_LOCATION + line
         ).c_str());
     }
     file.close();
@@ -133,7 +131,7 @@ void remove(int argc, char** argv) {
                           << arg
                           << "..."
                           << std::endl;
-                rm(config::RPS_LOCATION + arg);
+                rm(consts::RPS_LOCATION + arg);
             } else
                 fout << line
                      << std::endl;    
@@ -158,6 +156,15 @@ void list() {
 }
 
 
+void open() {
+    std::string path = consts::RPS_LOCATION;
+    #ifdef WINDOWS
+    path = path_to_win(path);
+    #endif
+    system((config::FILE_MANAGER + " " + path).c_str());
+}
+
+
 void help() {
     std::cout << "grm <mode> <repo> ...\n\n"
               << "modes:\n"
@@ -165,7 +172,8 @@ void help() {
               << config::UPDATE << ": update all repos\n"
               << config::REINSTALL << ": reinstalling all repos\n"
               << config::REMOVE << " <repo>: removes <repo>\n"
-              << config::LIST << ": shows installed repo list"
+              << config::LIST << ": shows installed repo list\n"
+              << config::OPEN << ": opens the directory where the repos are downloaded\n"
               << config::HELP << ": shows this\n";
 }
 
@@ -173,7 +181,7 @@ void help() {
 int main(int argc, char** argv) {
     std::string mode;
     if(argc == 1)
-        mode = config::HELP;
+        mode = "";
     else
         mode = argv[1];
 
@@ -187,8 +195,14 @@ int main(int argc, char** argv) {
         remove(argc, argv);
     else if(mode == config::LIST)
         list();
+    else if(mode == config::OPEN)
+        open();
     else if(mode == config::HELP)
         help();
+    else 
+        std::cout << "command " << mode << " does not exist" << std::endl
+                  << "try `grm help` for more instructions";
+
     // add reinstall one mode
     return 0;
 }
