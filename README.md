@@ -15,7 +15,8 @@ Download grm somewhere.
 
 
 Edit config.hxx:
-> Set as `RPS_LOCATION` the location, where you want your installed repos be downloaded.  
+> Set as `GRM_LOCATION` the location, where all grm files are located. (use slashes (/) instead of backslashes (\\))  
+> Set as `FILE_MANAGER` the default file manager you use on your OS.  
 > Set as `INSTALL` the command, which you want to use to install packages (mustn't contain spaces)  
 > and etc
 
