@@ -42,14 +42,14 @@ void rm(std::string arg){
 }
 
 
+// modes
 void install(int argc, char** argv) {
     for(int i = 2; i < argc; i++) {
         std::string clone = consts::CLONE,  // local mutable string for each argument
                     arg = argv[i];  // add default github prefix if necessary    
-        clone += arg + " " + consts::RPS_LOCATION;
         if(is_link(arg))
             arg = arg.substr(8);
-        clone += arg;
+        clone += consts::PREFIX + arg + " " + consts::RPS_LOCATION + arg;
         if(std::system(clone.c_str()) == 0) {
             std::ofstream file(consts::RPL_LOCATION, std::ios_base::app);
             file << arg
@@ -57,56 +57,6 @@ void install(int argc, char** argv) {
             file.close();
         }
     }
-}
-
-
-void update() {
-    std::ifstream file(consts::RPL_LOCATION);
-    while(file) {
-        std::string line;
-        file >> line;
-        if(line == "")
-            continue;
-        std::cout << "Trying to update "
-                  << line
-                  << "..." 
-                  << std::endl;
-        std::string arg = consts::RPS_LOCATION + line,
-                    cd = "cd " + arg;
-        #ifdef WINDOWS
-        arg = path_to_win(arg);
-        #endif
-        cd += "&& ";
-
-        std::cout << "Repairing local repository version..."
-                  << std::endl;
-        std::system((cd + consts::RESTORE).c_str());
-        std::cout << "Updating from remote repository..."
-                  << std::endl;
-        std::system((cd + consts::PULL).c_str());
-    }
-    file.close();
-}
-
-
-void reinstall() {
-    std::ifstream file(consts::RPL_LOCATION);
-    while(file) {
-        std::string line;
-        file >> line;
-        if(line == "")
-            continue;
-        std::cout << "Reinstalling " 
-                  << line 
-                  << "..."
-                  << std::endl;
-        std::string arg = " " + consts::RPS_LOCATION + line;
-        rm(arg);
-        std::system((
-            consts::CLONE + consts::PREFIX + line + " " + consts::RPS_LOCATION + line
-        ).c_str());
-    }
-    file.close();
 }
 
 
@@ -139,6 +89,62 @@ void remove(int argc, char** argv) {
         }
         fout.close();
     }                
+}
+
+
+// void reinstall() {
+//     std::ifstream file(consts::RPL_LOCATION);
+//     while(file) {
+//         std::string line;
+//         file >> line;
+//         if(line == "")
+//             continue;
+//         std::cout << "Reinstalling " 
+//                   << line 
+//                   << "..."
+//                   << std::endl;
+//         std::string arg = " " + consts::RPS_LOCATION + line;
+//         rm(arg);
+//         std::system((
+//             consts::CLONE + consts::PREFIX + line + " " + consts::RPS_LOCATION + line
+//         ).c_str());
+//     }
+//     file.close();
+// }
+
+
+void reinstall(int argc, char** argv) {
+    remove(argc, argv);
+    install(argc, argv);
+}
+
+
+void update() {
+    std::ifstream file(consts::RPL_LOCATION);
+    while(file) {
+        std::string line;
+        file >> line;
+        if(line == "")
+            continue;
+        std::cout << "Trying to update "
+                  << line
+                  << "..." 
+                  << std::endl;
+        std::string arg = consts::RPS_LOCATION + line,
+                    cd = "cd " + arg;
+        #ifdef WINDOWS
+        arg = path_to_win(arg);
+        #endif
+        cd += "&& ";
+
+        std::cout << "Repairing local repository version..."
+                  << std::endl;
+        std::system((cd + consts::RESTORE).c_str());
+        std::cout << "Updating from remote repository..."
+                  << std::endl;
+        std::system((cd + consts::PULL).c_str());
+    }
+    file.close();
 }
 
 
@@ -187,12 +193,12 @@ int main(int argc, char** argv) {
 
     if(mode == config::INSTALL)
         install(argc, argv);
-    else if(mode == config::UPDATE)
-        update();
-    else if(mode == config::REINSTALL)
-        reinstall();
     else if(mode == config::REMOVE)
         remove(argc, argv);
+    else if(mode == config::REINSTALL)
+        reinstall(argc, argv);
+    else if(mode == config::UPDATE)
+        update();
     else if(mode == config::LIST)
         list();
     else if(mode == config::OPEN)
@@ -202,7 +208,5 @@ int main(int argc, char** argv) {
     else 
         std::cout << "command " << mode << " does not exist" << std::endl
                   << "try `grm help` for more instructions";
-
-    // add reinstall one mode
     return 0;
 }
