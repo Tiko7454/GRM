@@ -46,7 +46,7 @@ void rm(std::string arg){
 void install(int argc, char** argv) {
     for(int i = 2; i < argc; i++) {
         std::string clone = consts::CLONE,  // local mutable string for each argument
-                    arg = argv[i];  // add default github prefix if necessary    
+                    arg = argv[i];  // add default github prefix if necessary
         if(is_link(arg))
             arg = arg.substr(8);
         clone += consts::PREFIX + arg + " " + consts::RPS_LOCATION + arg;
@@ -67,7 +67,7 @@ void remove(int argc, char** argv) {
         std::ifstream fin(consts::RPL_LOCATION);
         while(fin) {
             std::string line;
-            fin >> line;  // make a vector and store it there (or make a temp file)
+            fin >> line;
             if(line == "")
                 continue;
             temp.push(line);
@@ -90,27 +90,6 @@ void remove(int argc, char** argv) {
         fout.close();
     }                
 }
-
-
-// void reinstall() {
-//     std::ifstream file(consts::RPL_LOCATION);
-//     while(file) {
-//         std::string line;
-//         file >> line;
-//         if(line == "")
-//             continue;
-//         std::cout << "Reinstalling " 
-//                   << line 
-//                   << "..."
-//                   << std::endl;
-//         std::string arg = " " + consts::RPS_LOCATION + line;
-//         rm(arg);
-//         std::system((
-//             consts::CLONE + consts::PREFIX + line + " " + consts::RPS_LOCATION + line
-//         ).c_str());
-//     }
-//     file.close();
-// }
 
 
 void reinstall(int argc, char** argv) {
