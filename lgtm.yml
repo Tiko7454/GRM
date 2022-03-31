@@ -1,0 +1,6 @@
+extraction:
+  cpp:
+    prepare:
+      packages: "g++"
+    index:
+      build_command: "g++ root/grm.cxx -o root/grm"
