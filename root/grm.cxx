@@ -10,7 +10,7 @@
 #include <algorithm>
 
 
-std::string path_to_win(std::string x) {
+std::string _path_to_win(std::string x) {
     std::replace(x.begin(), x.end(), '/', '\\');
     return x;
 }
@@ -28,12 +28,23 @@ namespace consts {
 }
 
 
-bool is_link(std::string x) {
+bool _is_link(std::string x) {
     return x.find(consts::PREFIX) == 0;  /* if it starts with "https://" */
 }
 
 
-void rm(std::string arg) {
+bool _check_safety(std::string arg) {
+    std::string unsafe_symbols{"<>#%\" {}|^[]`;?:@&=+$,"};
+    for (char symbol : unsafe_symbols)
+        if (arg.find(symbol) >= 0)
+            return false;
+    return true;
+}
+
+
+void _rm(std::string arg) {
+    if (not _check_safety(arg))
+        return;
     #ifdef WINDOWS
     std::replace(arg.begin(), arg.end(), '/', '\\');
     std::system(("del /Q /F /S " + arg).c_str());
@@ -52,9 +63,11 @@ void install(int argc, char** argv) {
         /* TODO local mutable string for each argument */
         /* TODO add default github prefix if necessary */
 
-        if (is_link(arg))
+        if (_is_link(arg))
             arg = arg.substr(8);
         clone += consts::PREFIX + arg + " " + consts::RPS_LOCATION + arg;
+        if (not (_check_safety(arg) and _check_safety(consts::RPS_LOCATION)))
+            continue;
         if (std::system(clone.c_str()) == 0) {
             std::ofstream file(consts::RPL_LOCATION, std::ios_base::app);
             file << arg
@@ -86,7 +99,7 @@ void remove(int argc, char** argv) {
                           << arg
                           << "..."
                           << std::endl;
-                rm(consts::RPS_LOCATION + arg);
+                _rm(consts::RPS_LOCATION + arg);
             } else {
                 fout << line
                      << std::endl;
@@ -115,9 +128,11 @@ void update() {
                   << "..."
                   << std::endl;
         std::string arg = consts::RPS_LOCATION + line;
-        std::string cd  = "cd " + arg;
+        if (not _check_safety(arg))
+            return;
+        std::string cd = "cd " + arg;
         #ifdef WINDOWS
-        arg = path_to_win(arg);
+        arg = _path_to_win(arg);
         #endif
         cd += "&& ";
 
@@ -147,9 +162,10 @@ void list() {
 void open() {
     std::string path = consts::RPS_LOCATION;
     #ifdef WINDOWS
-    path = path_to_win(path);
+    path = _path_to_win(path);
     #endif
-    std::system((config::FILE_MANAGER + " " + path).c_str());
+    if (_check_safety(path))
+        std::system((config::FILE_MANAGER + " " + path).c_str());
 }
 
 
