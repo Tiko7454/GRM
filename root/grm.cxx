@@ -183,6 +183,12 @@ void help() {
 }
 
 
+void command_not_found(std::string mode) {
+    std::cout << "command " << mode << " does not exist" << std::endl
+              << "try `grm help` for more instructions";
+}
+
+
 int main(int argc, char** argv) {
     std::string mode;
     if (argc == 1)
@@ -205,7 +211,6 @@ int main(int argc, char** argv) {
     else if (mode == config::HELP)
         help();
     else
-        std::cout << "command " << mode << " does not exist" << std::endl
-                  << "try `grm help` for more instructions";
+        command_not_found(mode);
     return 0;
 }
