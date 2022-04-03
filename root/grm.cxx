@@ -36,7 +36,7 @@ bool _is_link(std::string x) {
 bool _check_safety(std::string arg) {
     std::string unsafe_symbols{"<>#%\" {}|^[]`;?:@&=+$,"};
     for (char symbol : unsafe_symbols)
-        if (arg.find(symbol) >= 0)
+        if (arg.find(symbol) != -1)
             return false;
     return true;
 }
