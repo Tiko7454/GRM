@@ -23,8 +23,4 @@ Edit config.hxx:
 
 
 Compile grm.cxx:
-> `g++ grm.cxx -o grm` (GNU/Linux)  
-> `g++ grm.cxx -o grm.exe` (Windows)
-
-Finally, use the binary file. You can move it anywhere you like and it will continue to work correctly.
-
+> `g++ grm.cxx -o grm`
